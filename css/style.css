@@ -1,3 +1,15 @@
+#firstName {
+    text-transform: capitalize;
+}
+
+#lastName {
+    text-transform: capitalize;
+}
+
+#email {
+    text-transform: lowercase;
+}
+
 .boogaloo {
     font-family: 'Boogaloo',
         cursive;
