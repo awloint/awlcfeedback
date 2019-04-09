@@ -25,7 +25,3 @@ $SMTPDebug = 0;
 $SMTPAuth = true;
 $SMTPSecure = 'ssl';
 $Port = 465;
-// API credentials from https://login.sendpulse.com/settngs/#api
-$apiUserId = '';
-$apiSecret = '';
-define('PATH_TO_ATTACH_FILE', __FILE__);
