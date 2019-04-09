@@ -17,55 +17,40 @@
 require '../config.php';
 require './DB.php';
 require './Notify.php';
-require './Newsletter.php';
 
-$mediaHouseName= $_POST['mediaHouseName'];
-$mediaHouseEmail = $_POST['mediaHouseEmail'];
-$mediaHousePhone = $_POST['mediaHousePhone'];
-$contactPersonName = $_POST['contactPersonName'];
-$contactPersonEmail =$_POST['contactPersonEmail'];
-$contactPersonPhone =$_POST['contactPersonPhone'];
-$representatives = $_POST['representatives'];
+$firstName= $_POST['firstName'];
+$lastName = $_POST['lastName'];
+$email = $_POST['email'];
+$phone = $_POST['phone'];
+$linkedin =$_POST['linkedin'];
+$twitter =$_POST['twitter'];
+$instagram = $_POST['instagram'];
+$facebook =$_POST['facebook'];
+$experience = $_POST['experience'];
+$suggestions =$_POST['suggestions'];
+$whatTheyLoved = $_POST['whatTheyLoved'];
 
-require './emails.php';
-$details = array(
-    "mediaHouseName" => $_POST['mediaHouseName'],
-    "mediaHouseEmail" =>$_POST['mediaHouseEmail'],
-    "mediaHousePhone" =>$_POST['mediaHousePhone'],
-    "contactPersonName" =>$_POST['contactPersonName'],
-    "contactPersonEmail" =>$_POST['contactPersonEmail'],
-    "contactPersonPhone" =>$_POST['contactPersonPhone'],
-    "representatives" => $_POST['representatives'],
+$details = array (
+    'firstName'     =>  $firstName,
+    'lastName'      =>  $lastName,
+    'email'         =>  $email,
+    'phone'         =>  $phone,
+    'linkedin'      =>  $linkedin,
+    'twitter'       =>  $twitter,
+    'instagram'     =>  $instagram,
+    'facebook'      =>  $facebook,
+    'experience'    =>  $experience,
+    'suggestions'   =>  $suggestions,
+    'whatTheyLoved' =>  $whatTheyLoved
 );
-$emails = array(
-    array(
-            "email"                 =>  $mediaHouseEmail,
-            "variables"             =>  array(
-            "mediaHouseName"        =>  $mediaHouseName,
-            "mediaHousePhone"       =>  $mediaHousePhone,
-            "contactPersonName"     =>  $contactPersonName,
-            "contactPersonEmail"    =>  $contactPersonEmail,
-            "contactPersonPhone"    =>  $contactPersonPhone,
-            "representatives"       =>  $representatives,
-            )
-    )
-);
+
 
 $db = new DB($host, $db, $username, $password);
 
 $notify = new Notify($smstoken, $emailHost, $emailUsername, $emailPassword, $SMTPDebug, $SMTPAuth, $SMTPSecure, $Port);
-$newsletter = new Newsletter($apiUserId, $apiSecret);
 
-// Check if the person has signed up to volunteer before
-if ($db->userExists($mediaHouseEmail, "awlc2019_accreditation")) {
-    echo json_encode("user_exists");
-}
 // Put the User into the Database
-if ($db->insertUser("awlc2019_accreditation", $details)) {
-    $notify->viaEmail("info@awlo.org", "African Women In Leadership Organisation", $mediaHouseEmail, $mediaHouseName, $emailBody, "AWLCRwanda2019 Media Accreditation");
-    $notify->viaEmail("info@awlo.org", "A Media house has been accredited", "info@awlo.org", "Admin", $emailBodyOrganisation, "New Media Accreditation.");
-    $notify->viaSMS("AWLOInt", "Dear {$mediaHouseName}, Your media accreditation was successful, Kindly check your email for more details.", $mediaHousePhone);
-    $notify->viaSMS("AWLOInt", "A Media House has just been accredited for the AWLCRwanda2019. Kindly check your email for the details.", "08037594969,08022473972");
-    $newsletter->insertIntoList("2334123", $emails);
+if ($db->insertUser("awlcfeedback", $details)) {
+    $notify->viaSMS("AWLOInt", "Dear {$firstName}, thank you for your feedback! It is highly valued and will take it into consideration for future and better outcomes for our conferences. We will keep in touch via email and social media. There is more to come.", $phone);
     echo json_encode("success");
 }
